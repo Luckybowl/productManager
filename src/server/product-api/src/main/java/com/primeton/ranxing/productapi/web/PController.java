@@ -35,6 +35,20 @@ public class PController {
 			return json.toJSONString();
 		}
 	}
+	
+	@RequestMapping(value = "/products/{pID}", method = RequestMethod.PUT)
+	String updateProduct(@PathVariable("pID") Long pID, @RequestBody Product product) {
+		JSONObject json = new JSONObject();
+		if (productServer.addProduct(product) == 1) {
+			json.put("status", HttpStatus.SC_OK);
+			json.put("message", "ok");
+			json.put("result", productServer.findOne(pID));
+			return json.toJSONString();
+		} else {
+			json.put("error", "create a product error");
+			return json.toJSONString();
+		}
+	}
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
 	Object getProducts(@RequestParam(value = "product_name", required = false) String name,
