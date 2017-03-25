@@ -1,0 +1,28 @@
+1. 使用freemark结合jquery-easyui进行  商品列表展示，商品增加
+
+2. 使用Spring mvc 进行 freemarker 的集成
+
+3. 使用okhhtp请求后端api 调用product接口，获取商品信息等
+
+   例如，调用findAll接口，得到商品列表信息json串，通过fastjson解析
+         得到商品model集合
+		 
+		 
+4.  将3中得到的model集合通过freemarker模板引擎解析展示
+
+
+5.  创建新增界面，通过js将值传递给 spring mvc， 
+
+    spring mvc将接收数据 转化为 json， 调用后端接口
+	
+
+
+为什么不直接使用 js 调用后端接口？而要经过 okhttp转发请求后端接口？
+
+因为要使用	freemark， freemark和Spring mvc及spring集成做前端展示，
+方案比较成熟，能实现快速开发
+
+使用了spring mvc 之后，在controller 里面，通过okhttp 请求 做前后端
+分离
+	
+	
