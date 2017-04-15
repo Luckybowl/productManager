@@ -1,6 +1,5 @@
 package com.primeton.ranxing.productapi.web;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,34 +21,48 @@ public class PController {
 	@Autowired
 	IProduct productServer;
 
+	@RequestMapping(value="hello",method=RequestMethod.GET)
+	String hi(){
+		return productServer.hi();
+	}
+	
+	@RequestMapping(value = "/products", method = RequestMethod.PUT)
+	String addProduct(Product p) {
+		if (productServer.addProduct(p) == 1) {
+			// 添加成功
+			return productServer.findOne(p.getProductId()).toString();
+		} else {
+			return "{\"error\": \"add failed\"}";
+		}
+	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/products",method = RequestMethod.GET)
-	Iterable<Product> getProducts(@RequestParam("name") String name,@RequestParam("ID") Long pId){
+	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	Iterable<Product> getProducts(@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "ID", required = false) Long pId) {
 		List<Product> returnData = new ArrayList<Product>();
 		@SuppressWarnings("unused")
 		Product product = null;
-		if(StringUtils.isEmpty(name) && StringUtils.isEmpty(pId)){
+		if (StringUtils.isEmpty(name) && StringUtils.isEmpty(pId)) {
 			return productServer.findAllProduct();
-		}else if(StringUtils.isEmpty(name)){
+		} else if (StringUtils.isEmpty(name)) {
 			returnData.add(productServer.getProductByName(name));
-		} else if(StringUtils.isEmpty(pId)){
+		} else if (StringUtils.isEmpty(pId)) {
 			returnData.add(productServer.findOne(pId));
 		}
 		return ((Iterable<Product>) returnData.iterator());
-		
+
 	}
-	
-	@RequestMapping(value="/products/{id}",method = RequestMethod.GET)
-	Product findById(@PathVariable("id") Long id){
+
+	@RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+	Product findById(@PathVariable("id") Long id) {
 		return productServer.findOne(id);
 	}
-	
 
-	@RequestMapping(value = "/products/{id}",method=RequestMethod.DELETE)
-	String deleteProduct(@PathVariable("id") long id){
-		Product product = productServer.findOne(id);	//找出对应id的商品
-		productServer.delete(product);			//删除对应商品
+	@RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
+	String deleteProduct(@PathVariable("id") long id) {
+		Product product = productServer.findOne(id); // 找出对应id的商品
+		productServer.delete(product); // 删除对应商品
 		return "{\"status\":\"OK\"}";
 	}
 }
