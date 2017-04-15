@@ -1,10 +1,6 @@
 package com.primeton.ranxing.productapi.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,11 +16,6 @@ public class PController {
 
 	@Autowired
 	IProduct productServer;
-
-	@RequestMapping(value="hello",method=RequestMethod.GET)
-	String hi(){
-		return productServer.hi();
-	}
 	
 	@RequestMapping(value = "/products", method = RequestMethod.PUT)
 	String addProduct(Product p) {
@@ -36,21 +27,9 @@ public class PController {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	Iterable<Product> getProducts(@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "ID", required = false) Long pId) {
-		List<Product> returnData = new ArrayList<Product>();
-		@SuppressWarnings("unused")
-		Product product = null;
-		if (StringUtils.isEmpty(name) && StringUtils.isEmpty(pId)) {
-			return productServer.findAllProduct();
-		} else if (StringUtils.isEmpty(name)) {
-			returnData.add(productServer.getProductByName(name));
-		} else if (StringUtils.isEmpty(pId)) {
-			returnData.add(productServer.findOne(pId));
-		}
-		return ((Iterable<Product>) returnData.iterator());
+	Iterable<Product> getProducts() {
+		return productServer.findAllProduct();
 
 	}
 

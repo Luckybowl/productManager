@@ -19,9 +19,6 @@ import com.primeton.ranxing.productapi.entity.Product;
 
 @FeignClient("db-service")
 public interface IProduct {
-	
-	@RequestMapping(value="/hi",method=RequestMethod.GET)
-	String hi();
 
 	/**
 	 * 添加商品
@@ -30,7 +27,7 @@ public interface IProduct {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public int addProduct(@RequestParam("product") Product product);
+	int addProduct(@RequestParam("product") Product product);
 
 	/**
 	 * 根据商品名字获取商品
@@ -39,7 +36,7 @@ public interface IProduct {
 	 * @return
 	 */
 	@RequestMapping(value = "/getProductByName", method = RequestMethod.GET)
-	public Product getProductByName(@RequestParam("productName") String productName);
+	Product getProductByName(@RequestParam("productName") String productName);
 
 	/**
 	 * 获取所有商品
@@ -47,7 +44,7 @@ public interface IProduct {
 	 * @return
 	 */
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
-	public Iterable<Product> findAllProduct();
+	Iterable<Product> findAllProduct();
 
 	/**
 	 * 根据ID获取商品
@@ -56,7 +53,7 @@ public interface IProduct {
 	 * @return
 	 */
 	@RequestMapping(value = "/findById", method = RequestMethod.GET)
-	public Product findOne(@RequestParam("id") Long id);
+	Product findOne(@RequestParam("id") Long id);
 
 	/**
 	 * 按条件分页查询
@@ -83,7 +80,7 @@ public interface IProduct {
 	 * @param product
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public void delete(@RequestParam("product") Product product);
+	void delete(@RequestParam("product") Product product);
 
 	/**
 	 * 批量删除指定商品
@@ -92,6 +89,6 @@ public interface IProduct {
 	 * @param products
 	 */
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.GET)
-	public void deleteBatch(@RequestParam("products") Iterable<Product> products);
+	void deleteBatch(@RequestParam("products") Iterable<Product> products);
 
 }
