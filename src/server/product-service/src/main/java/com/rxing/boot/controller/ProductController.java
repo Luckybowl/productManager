@@ -65,9 +65,9 @@ public class ProductController {
 	 */
 	@RequestMapping(value="/getProductByName",method=RequestMethod.GET)
 	public Product getProductByName(@RequestParam String productName){
-		ServiceInstance instance=client.getLocalServiceInstance();
 		Product product=productDao.getProductByName(productName);
-		LOGGER.info("/getProductByName,host:"+instance.getHost()+",service_id:"+instance.getServiceId()+",result:"+productName.toString());
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/getProductByName,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		return product;
 	}
 	
@@ -75,8 +75,10 @@ public class ProductController {
 	 * 获取所有商品
 	 * @return
 	 */
-	@RequestMapping(value="findAll",method=RequestMethod.GET)
+	@RequestMapping(value="/findAll",method=RequestMethod.GET)
 	public Iterable<Product> findAllProduct(){
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/findAll,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		return productDao.findAll();
 	}
 	
@@ -85,8 +87,10 @@ public class ProductController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="findById",method=RequestMethod.GET)
+	@RequestMapping(value="/findById",method=RequestMethod.GET)
 	public Product findOne(@RequestParam Long id){
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/findById,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		return productDao.findOne(id);
 	}
 	
@@ -99,10 +103,12 @@ public class ProductController {
 	 * @param cate --类型条件参数
 	 * @return
 	 */
-	@RequestMapping(value="findAllByConditonWithPage",method=RequestMethod.GET)
+	@RequestMapping(value="/findAllByConditonWithPage",method=RequestMethod.GET)
 	public Page<Product> findAllByConditonWithPage(@RequestParam int page,@RequestParam int size,@RequestParam List<String> properties,
 			Product prod,Category cate){
 		Page<Product>  product=productDao.findAll(new MySpec(prod,cate),new PageRequest(page, size,new Sort(Direction.DESC,properties)));		
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/findAllByConditonWithPage,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		return product;
 	}
 	
@@ -110,8 +116,10 @@ public class ProductController {
 	 * 删除指定商品
 	 * @param product
 	 */
-	@RequestMapping(value="delete",method=RequestMethod.GET)
+	@RequestMapping(value="/delete",method=RequestMethod.GET)
 	public void  delete(@RequestParam Product product){
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/delete,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		productDao.delete(product);
 	}
 	
@@ -120,8 +128,10 @@ public class ProductController {
 	 * @param  
 	 * @param products
 	 */
-	@RequestMapping(value="deleteBatch",method=RequestMethod.GET)
+	@RequestMapping(value="/deleteBatch",method=RequestMethod.GET)
 	public void  deleteBatch(@RequestParam Iterable<Product> products){
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/deleteBatch,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		productDao.delete(products);
 	}
 	
@@ -156,8 +166,7 @@ public class ProductController {
 					cBuilder.lessThan(productRest, product.getProductRest()),
 					cBuilder.lessThan(productRebate, product.getProductRebate()),
 					cBuilder.greaterThan(productClickCounts, String.valueOf(product.getProductClickCounts()))
-					);	
-			
+					);				
 			Path<String> categoryName=root.join("category",JoinType.INNER).get("categoryName");
 			return cBuilder.like(categoryName, "%"+category.getCategoryName()+"%");
 		}
