@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -33,8 +36,8 @@ public class Product implements Serializable{
 	 * @param productPicturePath -商品图片路径
 	 */
 	public Product(long productId, String productName, String productDesc, float productPrice, int productTotal,
-			int productRest, float productRebate, long productClickCounts, String productPicturePath) {
-		this(productName, productDesc, productPrice, productTotal, productRest, productRebate, productClickCounts, productPicturePath);
+			int productRest, float productRebate, long productClickCounts, String productPicturePath,Category category) {
+		this(productName, productDesc, productPrice, productTotal, productRest, productRebate, productClickCounts, productPicturePath,category);
 		this.productId = productId;
 	}
 	
@@ -50,7 +53,7 @@ public class Product implements Serializable{
 	 * @param productPicturePath
 	 */
 	public Product(String productName, String productDesc, float productPrice, int productTotal, int productRest,
-			float productRebate, long productClickCounts, String productPicturePath) {
+			float productRebate, long productClickCounts, String productPicturePath,Category category) {
 		super();
 		this.productName = productName;
 		this.productDesc = productDesc;
@@ -60,6 +63,7 @@ public class Product implements Serializable{
 		this.productRebate = productRebate;
 		this.productClickCounts = productClickCounts;
 		this.productPicturePath = productPicturePath;
+		this.category=category;
 	}
 	/**
 	 * @return the productId
@@ -170,6 +174,22 @@ public class Product implements Serializable{
 		this.productPicturePath = productPicturePath;
 	}	
 	
+	
+	/**
+	 * @return the category
+	 */
+	public Category getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+
 	@Id
 	private long productId;
 	private String productName;
@@ -180,5 +200,8 @@ public class Product implements Serializable{
 	private float productRebate;
 	private long productClickCounts;
 	private String productPicturePath;
+	@OneToOne
+	@JoinColumn(name="categoryId")
+	private Category category;	
 	private static final long serialVersionUID = 1L;
 }
