@@ -71,8 +71,6 @@ public class ProductController {
 		return product;
 	}
 	
-	
-	
 	/**
 	 * 获取所有商品
 	 * @return
@@ -94,13 +92,15 @@ public class ProductController {
 	
 	/**
 	 * 按条件分页查询
-	 * @param page
-	 * @param size
-	 * @param properties
+	 * @param page --页数
+	 * @param size --页面大小
+	 * @param properties --排序属性
+	 * @param prod --商品条件参数
+	 * @param cate --类型条件参数
 	 * @return
 	 */
-	@RequestMapping(value="page",method=RequestMethod.GET)
-	public Page<Product> findOne(@RequestParam int page,@RequestParam int size,@RequestParam List<String> properties,
+	@RequestMapping(value="findAllByConditonWithPage",method=RequestMethod.GET)
+	public Page<Product> findAllByConditonWithPage(@RequestParam int page,@RequestParam int size,@RequestParam List<String> properties,
 			Product prod,Category cate){
 		Page<Product>  product=productDao.findAll(new MySpec(prod,cate),new PageRequest(page, size,new Sort(Direction.DESC,properties)));		
 		return product;
