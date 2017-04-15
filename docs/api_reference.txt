@@ -1,0 +1,56 @@
+数据服务接口：
+
+一
+	/**
+	 * 添加商品
+	 * @param product--需要添加的商品
+	 * @return
+	 */
+	@RequestMapping(value="/add",method=RequestMethod.GET)
+	public int addProduct(@RequestParam Product product)
+	
+二
+
+	/**
+	 * 删除指定商品
+	 * @param product
+	 */
+	@RequestMapping(value="delete",method=RequestMethod.GET)
+	public void  delete(@RequestParam Product product)
+	
+三  /**
+	 * 批量删除指定商品
+	 * @param  
+	 * @param products
+	 */
+	@RequestMapping(value="deleteBatch",method=RequestMethod.GET)
+	public void  deleteBatch(@RequestParam Iterable<Product> products)
+	
+	
+四  /**
+	 * 获取所有商品
+	 * @return
+	 */
+	@RequestMapping(value="findAll",method=RequestMethod.GET)
+	public Iterable<Product> findAllProduct()
+	
+五 /**
+	 * 根据ID获取商品
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="findById",method=RequestMethod.GET)
+	public Product findOne(@RequestParam Long id)
+	
+六  /**
+	 * 按条件分页查询
+	 * @param page --页数
+	 * @param size --页大小
+	 * @param properties --排序参数
+	 * @param prod --商品信息条件
+	 * @param cate --商品类型信息条件
+	 * @return 包含了查询出的商品信息和页的信息
+	 */
+	@RequestMapping(value="findByContidionWithPage",method=RequestMethod.GET)
+	public Page<Product> findAllByConditonWithPage(@RequestParam int page,@RequestParam int size,@RequestParam List<String> properties,
+			Product prod,Category cate)
