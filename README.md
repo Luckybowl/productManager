@@ -13,12 +13,19 @@
 ## 目录结构
 ```text
  └─productManager
-    ├─configs                   # 配置文件存放处
-    ├─dbscripts                 # 数据库执行脚本
-    ├─docs                      # 项目相关文档
-    └─src                       # 项目源码
+    ├─configs                            # 配置文件存放处
+    ├─dbscripts                          # 数据库执行脚本
+    ├─docs                               # 项目相关文档
+    └─src                                # 项目源码
+      ├─client                           # 客户端代码
+      └─server                           # 服务端代码
+          ├─eureka-server                # eureka注册服务器
+          ├─product-api                  # RESTful接口服务
+          └─product-service              # 数据库操作服务
 ```
 ## ChangeLog
+### v1.0.1 (2017-04-15）
+   - 服务端框架雏形
 ### v1.0.0 (2017-04-14)
    - 定义目录结构
 
