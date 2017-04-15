@@ -3,6 +3,7 @@ package com.primeton.ranxing.productapi.server;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,8 +27,8 @@ public interface IProduct {
 	 * @param product--需要添加的商品
 	 * @return
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	int addProduct();
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	int addProduct(@RequestBody Product product);
 
 	/**
 	 * 根据商品名字获取商品

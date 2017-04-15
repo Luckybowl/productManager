@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,8 +49,8 @@ public class ProductController {
 	 * @param product--需要添加的商品
 	 * @return
 	 */
-	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public int addProduct(@RequestParam Product product) {
+	@RequestMapping(value="/add",method=RequestMethod.POST)
+	public int addProduct(@RequestBody Product product) {
 		Product result=productDao.save(product);
 		if (result!=null) {
 			return 1;
@@ -117,10 +118,10 @@ public class ProductController {
 	 * @param product
 	 */
 	@RequestMapping(value="/delete",method=RequestMethod.GET)
-	public void  delete(@RequestParam Product product){
+	public void  delete(@RequestParam Long product_id){
 		ServiceInstance instance=client.getLocalServiceInstance();
 		LOGGER.info("/delete,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
-		productDao.delete(product);
+		productDao.delete(productDao.findOne(product_id));
 	}
 	
 	/**

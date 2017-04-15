@@ -25,9 +25,11 @@ public class PController {
 	@RequestMapping(value = "/products/{pID}", method = RequestMethod.POST)
 	String createProduct(@PathVariable("pID") Long pID, @RequestBody Product product) {
 		JSONObject json = new JSONObject();
-
-		if (productServer.addProduct() == 1) {
-			return JSON.toJSONString(productServer.findOne(pID));
+		if (productServer.addProduct(product) == 1) {
+			json.put("status", HttpStatus.SC_OK);
+			json.put("message", "ok");
+			json.put("result", productServer.findAllProduct());
+			return json.toJSONString();
 		} else {
 			json.put("error", "create a product error");
 			return json.toJSONString();
