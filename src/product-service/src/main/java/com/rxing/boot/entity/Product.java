@@ -1,29 +1,20 @@
 package com.rxing.boot.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 商品类
+ * 商品实体类
  * @author wxh
  * 2017年4月14日
  */
 @Entity
 @Table(name="product")
-public class Product {
-	
-	@Id
-	private long productId;
-	private String productName;
-	private String productDesc;
-	private float productPrice;
-	private int productTotal;
-	private int productRest;
-	private float productRebate;
-	private long productClickCounts;
-	private String productPicturePath;
-	
+public class Product implements Serializable{
+
 	/**
 	 * 缺省构造函数
 	 */
@@ -177,7 +168,17 @@ public class Product {
 	 */
 	public void setProductPicturePath(String productPicturePath) {
 		this.productPicturePath = productPicturePath;
-	}
+	}	
 	
-	
+	@Id
+	private long productId;
+	private String productName;
+	private String productDesc;
+	private float productPrice;
+	private int productTotal;
+	private int productRest;
+	private float productRebate;
+	private long productClickCounts;
+	private String productPicturePath;
+	private static final long serialVersionUID = 1L;
 }
