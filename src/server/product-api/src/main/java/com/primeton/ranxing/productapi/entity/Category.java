@@ -1,12 +1,13 @@
 package com.primeton.ranxing.productapi.entity;
 
-/**
- * 商品类型实体类
- * 
- * @author wxh 2017年4月15日
- */
-public class Category {
+import java.io.Serializable;
 
+public class Category implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 默认构造函数
 	 */

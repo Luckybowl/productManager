@@ -27,7 +27,7 @@ public interface IProduct {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	int addProduct(@RequestParam("product") Product product);
+	int addProduct();
 
 	/**
 	 * 根据商品名字获取商品
@@ -70,9 +70,9 @@ public interface IProduct {
 	 *            --类型条件参数
 	 * @return
 	 */
-	/*@RequestMapping(value = "/findAllByConditonWithPage", method = RequestMethod.GET)
-	String findAllByConditonWithPage(@RequestParam("page") int page, @RequestParam("size") int size,
-			@RequestParam("properties") List<String> properties, Product prod, Category cate);*/
+	@RequestMapping(value = "/findAllByConditonWithPage", method = RequestMethod.GET)
+	Iterable<Product> findAllByConditonWithPage(@RequestParam("page") int page, @RequestParam("size") int size,
+			@RequestParam("properties") List<String> properties);
 
 	/**
 	 * 删除指定商品
@@ -80,7 +80,7 @@ public interface IProduct {
 	 * @param product
 	 */
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	void delete(@RequestParam("product") Product product);
+	void delete(@RequestParam("product_id") Long product_id);
 
 	/**
 	 * 批量删除指定商品
@@ -89,6 +89,6 @@ public interface IProduct {
 	 * @param products
 	 */
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.GET)
-	void deleteBatch(@RequestParam("products") Iterable<Product> products);
+	void deleteBatch();
 
 }
