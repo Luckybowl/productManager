@@ -23,18 +23,8 @@ create table Product
    productRebate        float,
    productClickCounts   bigint,
    productPicturePath   varchar(64),
+   category_id 			bigint,
    primary key (productId)
-);
-
-/*==============================================================*/
-/* Table: ProductTagRelation                                    */
-/*==============================================================*/
-drop table if exists ProductTagRelation;
-create table ProductTagRelation
-(
-   productId            bigint not null,
-   categoryId                bigint not null,
-   primary key (productId, categoryId)
 );
 
 /*==============================================================*/
@@ -45,7 +35,6 @@ create table Category
 (
    categoryId                bigint not null,
    categoryName              varchar(64) not null,
-   categoryParentId          bigint,
    primary key (categoryId)
 );
 
