@@ -39,6 +39,7 @@ public class PController {
 	@RequestMapping(value = "/products/{pID}", method = RequestMethod.PUT)
 	String updateProduct(@PathVariable("pID") Long pID, @RequestBody Product product) {
 		JSONObject json = new JSONObject();
+		product.setProductId(pID);
 		if (productServer.addProduct(product) == 1) {
 			json.put("status", HttpStatus.SC_OK);
 			json.put("message", "ok");
