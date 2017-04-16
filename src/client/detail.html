@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="./js/lib/react.js"></script>
+    <script src="./js/lib/react-dom.js"></script>
+    <script src="./js/lib/jquery.min.js"></script>  
+    <script src="./js/lib/browser.min.js"></script>
+
+  </head>
+  <body>
+
+    <div id="wrap"></div>
+    <script type="text/babel">
+      var MyTopNav = React.createClass({
+        render: function(){
+          return (
+            <nav className="navbar navbar-default">
+              <div className="container-fluid">
+                <div className="navbar-header">
+                  <a className="navbar-brand">商品详情</a>
+                </div>
+              </div>
+            </nav>
+          )
+        }
+      });
+
+
+    var MyItems = React.createClass({
+
+    getInitialState: function() {
+            return {
+              productName : "dameng",
+        productPrice: "",
+              productDesc: "",
+              productClickCounts:"",
+              categoryName: "",
+              productTotal:""
+            };
+        },  
+
+        componentDidMount: function() {
+          //在组件在第一次 挂载完成之后 发送ajax请求，获取所有商品资源
+          $.ajax({
+            type: "get",
+            url : "http://localhost:8089/api/products/"+getQueryString("product_id"),
+            dataType: "json",
+            success: function(data){
+                if(data.status == 200){
+                  //数据请求成功
+                  this.setState({
+                    //更改status状态 重新render组件
+                    productName: data.result.productName,
+                    productPrice: data.result.productPrice,
+                    productDesc: data.result.productDesc,
+                    productClickCounts: data.result.productClickCounts,
+                    categoryName: data.result.categoryName,
+                    productTotal: data.result.productTotal
+                  })
+                }                
+            }.bind(this)
+          })
+        },
+
+        hanldClick: function(args){
+            $.ajax({
+              type: "post",
+              url: "http://localhost:8089/api/products/"+args,
+              dataType: "json",
+              success: function(data){
+                      if(data.status == 200){
+                        //数据请求成功
+                        this.setState({
+                          //更改status状态 重新render组件
+                          productName: data.result.productName,
+                          productPrice: data.result.productPrice,
+                          productDesc: data.result.productDesc,
+                          productClickCounts: data.result.productClickCounts,
+                          categoryName: data.result.categoryName,
+                          productTotal: data.result.productTotal
+                        })
+                      }                
+                  }.bind(this)
+            })
+        },      
+
+      render: function(){
+          return (
+            <div className="col-md-6">
+              <div className="thumbnail" >
+                <a href="javascript:void(0);" target="_blank" className="thumbnails">
+                  <img src={this.state.productName} />
+                </a>
+                <div className="caption text-center">
+                  <label className="text-center">名称：</label>
+                  <label className="text-center">{this.state.productName}</label>
+                  <br/>
+                  <label className="text-center">价格：</label>
+                  <label className="text-center" >{this.state.productPrice}</label>
+                  <br/>
+                  <label className="text-center">描述：</label>
+                  <label className="text-center">{this.state.productDesc}</label>
+                  <br/>
+                  <label className="text-center">点击数量：</label>
+                  <label className="text-center">{this.state.productClickCounts}</label>
+                  <br/>
+                  <label className="text-center">剩余数量：</label>
+                  <label className="text-center">{this.state.productTotal}</label>
+          <br/>
+                </div>
+            </div>
+          </div>
+          );
+        }
+      });
+        
+  function getQueryString(name){ 
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+    var r = window.location.search.substr(1).match(reg); 
+    if (r != null) return unescape(r[2]); return null; 
+  } 
+
+  var MyWrap = React.createClass({
+       
+        render: function(){
+          return (
+            <div>{
+              React.Children.map(this.props.children, function (child) {
+                  return child
+              })
+            }</div>
+          );
+        }
+      });
+    
+      ReactDOM.render(
+        <MyWrap>
+          <MyTopNav />
+          <MyItems/>
+        </MyWrap>,
+        document.getElementById('wrap')
+      );
+    </script>
+  </body>
+</html>

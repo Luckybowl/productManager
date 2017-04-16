@@ -14,12 +14,17 @@
     <div id="wrap"></div>
     <script type="text/babel">
       var MyTopNav = React.createClass({
+    addClick: function(){
+                  window.location.href='addproduct.html';
+    },
         render: function(){
           return (
             <nav className="navbar navbar-default">
               <div className="container-fluid">
                 <div className="navbar-header">
                   <a className="navbar-brand">商品</a>
+            <button className="btn btn-primary" onClick={this.addClick}>添加</button>
+                
                 </div>
               </div>
             </nav>
@@ -81,12 +86,22 @@
         hanldClick: function(args){
             window.location.href='detail.html?product_id='+args;
         },
+      editClick: function(args){
+            window.location.href='editproduct.html?product_id='+args;
+        },
+    deleteClick: function(args){
+            $.ajax({
+        type:"delete",
+        url:"http://localhost:8089/api/products/"+args,
+        success:function(){alert("你删了我！再见！")}
+      })
+        },
 
         render: function(){
           return (
             <div className="col-xs-3">
-              <div className="thumbnail" onClick={this.hanldClick.bind(this,this.props.id)}>
-                <a href="javascript:void(0);" target="_blank" className="thumbnails">
+              <div className="thumbnail" >
+                <a href="javascript:void(0);" target="_blank" className="thumbnails" onClick={this.hanldClick.bind(this,this.props.id)}>
                   <img src={this.props.product_imgurl} />
                 </a>
                 <div className="caption text-center">
@@ -98,7 +113,11 @@
                   <br/>
                   <label className="text-center">描述：</label>
                   <label className="text-center">{this.props.product_desc}</label>
+          <br/>
+          <button className="btn btn-primary" onClick={this.editClick.bind(this,this.props.id)}>编辑</button>&nbsp;
+          <button className="btn btn-primary" onClick={this.deleteClick.bind(this,this.props.id)}>删除</button>
                 </div>
+
             </div>
           </div>
           );
@@ -206,6 +225,7 @@
           );
         }
       });
+
     
       ReactDOM.render(
         <MyWrap>
