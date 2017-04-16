@@ -96,6 +96,34 @@ public class ProductController {
 	}
 	
 	/**
+	 * 分类查询
+	 * @param categoryName --类型名
+	 * @return
+	 */
+	@RequestMapping(value="/findAllByCategory",method=RequestMethod.GET)
+	public List<Product> findAllByCategory(@RequestParam String categoryName){
+		return productDao.findAll(new MySpecCate(categoryName));
+	}
+	
+	/**
+	 * 自定义分类查询
+	 */
+	private class MySpecCate implements Specification<Product>{
+		private String categoryName;
+		public MySpecCate(String categoryName) {
+			this.categoryName=categoryName;
+		}
+		
+		@Override
+		public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cBuilder) {
+			Path<String> cateName=root.join("category",JoinType.INNER).get("categoryName");
+			String result="%"+categoryName.substring(1, categoryName.length()-1)+"%";
+			System.out.println(result);
+			return cBuilder.like(cateName, result);
+		
+	}
+	
+	/**
 	 * 按条件分页查询
 	 * @param page --页数
 	 * @param size --页面大小
@@ -137,6 +165,8 @@ public class ProductController {
 	}
 	
 	
+
+	
 	/**
 	 * 自定义查询方式
 	 */
@@ -173,4 +203,5 @@ public class ProductController {
 		}
 	}
 	
+}
 }
