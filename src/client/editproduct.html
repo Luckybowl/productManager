@@ -29,12 +29,12 @@
       });
 
 
-    var MyItems = React.createClass({
+	  var MyItems = React.createClass({
 
-    getInitialState: function() {
+		getInitialState: function() {
             return {
               productName : "dameng",
-        productPrice: "",
+ 			  productPrice: "",
               productDesc: "",
               productClickCounts:"",
               categoryName: "",
@@ -42,7 +42,7 @@
             };
         },  
 
-  componentDidMount: function() {
+	componentDidMount: function() {
           //在组件在第一次 挂载完成之后 发送ajax请求，获取所有商品资源
           $.ajax({
             type: "get",
@@ -53,7 +53,7 @@
                   //数据请求成功
                   this.setState({
                     //更改status状态 重新render组件
-          productId: data.result.productId,
+					productId: data.result.productId,
                     productName: data.result.productName,
                     productPrice: data.result.productPrice,
                     productDesc: data.result.productDesc,
@@ -66,64 +66,75 @@
           })
         },
 
-  saveClick: function(args) {        
-          $.ajax({
-            type: "put",
-            url : "http://localhost:8089/api/products/"+args,
-            dataType: "json",
-            data: {
-                  productId: args,
+		handleChange: function(args,event){
+		var obj = {};
+		obj[args] = event.target.value;
+		this.setState(obj)
+	},
+	submitHandler: function(e) {
+		e.preventDefault();   
+		var postData = {
+					productId: this.state.productId,
                     productName: this.state.productName,
                     productPrice: this.state.productPrice,
                     productDesc: this.state.productDesc,
                     productTotal: this.state.productTotal,
-          productPicturePath: this.state.productPicturePath
-                 
-                },
-      success:function(){
-        alert("成功啦成功啦成功啦！");
-      }                
+					productPicturePath: this.state.productPicturePath
+			}     
+			console.log(postData)
+    
+          $.ajax({
+            type: "put",
+            url : "http://localhost:8089/api/products/"+getQueryString("product_id"),
+            dataType: "json",
+			contentType: "application/json",
+            data: JSON.stringify(postData),
+			success:function(){
+				window.location.href = "/index.html";
+			}                
           })
         },
 
 
       render: function(){
           return (
+<form onSubmit={this.submitHandler}>
             <div className="col-md-6">
               <div className="thumbnail" >
                 <div className="caption text-center">
-        <input type="hidden" className="text-center" value={this.state.productId}></input>
+				<input type="hidden" className="text-center" value={this.state.productId}></input>
                   <label className="text-center">名称：</label>
-                  <input className="text-center" value={this.state.productName}></input>
+                  <input className="text-center" defaultValue={this.state.productName} onChange={this.handleChange.bind(this,"productName")}></input>
                   <br/>
                   <label className="text-center">价格：</label>
-                  <input className="text-center" value={this.state.productPrice}></input>
+                  <input className="text-center" defaultValue={this.state.productPrice} onChange={this.handleChange.bind(this,"productPrice")}></input>
                   <br/>
                   <label className="text-center">描述：</label>
-                  <input className="text-center" value={this.state.productDesc}></input>
+                  <input className="text-center" defaultValue={this.state.productDesc} onChange={this.handleChange.bind(this,"productDesc")}></input>
                   <br/>
                   <label className="text-center">剩余数量：</label>
-                  <input className="text-center" value={this.state.productTotal}></input>
-          <br/>
+                  <input className="text-center" defaultValue={this.state.productTotal} onChange={this.handleChange.bind(this,"productTotal")}></input>
+					<br/>
                   <label className="text-center">图片路径：</label>
-                  <input className="text-center" value={this.state.productPicturePath}></input>
+                  <input className="text-center" defaultValue={this.state.productPicturePath} onChange={this.handleChange.bind(this,"productPicturePath")}></input>
                   <br/>
-        <button className="btn btn-primary" onClick={this.saveClick.bind(this,this.state.productId)}>保存</button>
-          
+				<button className="btn btn-primary" type="submit">保存</button>
+					
                 </div>
             </div>
           </div>
+</form>
           );
         }
       });
-        
-  function getQueryString(name){ 
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
-    var r = window.location.search.substr(1).match(reg); 
-    if (r != null) return unescape(r[2]); return null; 
-  } 
+	      
+	function getQueryString(name){ 
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+		var r = window.location.search.substr(1).match(reg); 
+		if (r != null) return unescape(r[2]); return null; 
+	} 
 
-  var MyWrap = React.createClass({
+	var MyWrap = React.createClass({
        
         render: function(){
           return (
@@ -139,7 +150,7 @@
       ReactDOM.render(
         <MyWrap>
           <MyTopNav />
-          <MyItems/>
+         	<MyItems/>
         </MyWrap>,
         document.getElementById('wrap')
       );
