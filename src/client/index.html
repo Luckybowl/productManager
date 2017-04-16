@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="./js/lib/react.js"></script>
+    <script src="./js/lib/react-dom.js"></script>
+    <script src="./js/lib/browser.min.js"></script>
+
+  </head>
+  <body>
+    <div id="wrap"></div>
+    <script type="text/babel">
+      var MyTopNav = React.createClass({
+        render: function(){
+          return (
+            <nav className="navbar navbar-default">
+              <div className="container-fluid">
+                <div className="navbar-header">
+                  <a className="navbar-brand">商品</a>
+                </div>
+              </div>
+            </nav>
+          )
+        }
+      });
+
+      var liList = ["manhat","anhat","mahat","dsmanhat"];
+      var MyNavBar = React.createClass({
+          render: function () {
+              return (
+                  <div className="col-xs-2 sidebar">
+                    <ul className="nav nav-sidebar nav-pills nav-stacked">{                   
+                       liList.map(function(item,index){
+                          return (
+                          <li key={index} role="presentation" >
+                            <a id={item} href={`#${item}`} aria-controls={item} role="tab" data-toggle="tab">{item}</a>
+                          </li>
+                          )
+                       })                     
+                    }</ul>
+                  </div>
+              );
+          }
+      });
+
+      var MyItems = React.createClass({
+
+        render: function(){
+          return (
+            <div className="col-xs-3">
+              <div className="thumbnail ">
+                <a href={this.props.goto} target="_blank" className="thumbnails">
+                  <img src={this.props.product_imgurl} />
+                </a>
+                <div className="caption">
+                  <p className="text-center">{this.props.product_name}</p>
+                </div>
+            </div>
+          </div>
+          );
+        }
+      });
+
+      var productList = [
+        {
+          name: "商品1",
+          url: "/images/da.jpg"
+        },
+        {
+          name: "商品1",
+          url: "/images/da.jpg"
+        },
+      ]
+
+      var MyContent = React.createClass({
+        render: function(){
+          return ( 
+            <div className="col-xs-10 main">
+                <div className="row">{
+                  productList.map(function(item,index){
+                    return (
+                      <MyItems goto={item.url} product_name={item.name} product_imgurl={item.url} />
+                    )
+
+                  })
+
+                }</div>
+            </div>
+          )
+        }
+
+      });
+
+      var MyWrap = React.createClass({
+
+        render: function(){
+          return (
+              <div>
+                <MyTopNav />
+                <div className="container-fluid">
+                  <div className="row">
+                    <MyNavBar />
+                    <MyContent />
+                  </div>
+                </div>
+              </div>
+          );
+        }
+      });
+    
+      ReactDOM.render(
+        <MyWrap />,
+        document.getElementById('wrap')
+      );
+    </script>
+  </body>
+</html>
