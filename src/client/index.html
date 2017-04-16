@@ -26,8 +26,8 @@
         }
       });
 
-      var liList = ["manhat","anhat","mahat","dsmanhat"];
       var MyNavBar = React.createClass({
+          //左侧树形菜单组件
           getInitialState: function() {
             return {
               listData : [],
@@ -86,6 +86,8 @@
         }
       });
 
+
+      //从服务器获取所有商品列表之后，这个就可以删掉了
       var productList = [
         {
           name: "商品1",
@@ -98,10 +100,39 @@
       ]
 
       var MyContent = React.createClass({
+        //商品列表组件
+        getInitialState: function() {
+            return {
+              productList : [],
+            };
+        },  
+
+        componentDidMount: function() {
+          //在组件完成挂载的时候 发送ajax请求，获取所有商品资源
+          $.ajax({
+            type: "get",
+            url : this.props.source,
+            dataType: "json",
+            success: function(data){
+                if(data.status == 200){
+                  //数据请求成功
+                  this.setState({
+                    //更改status状态 重新render组件
+                    productList: data.result
+                  })
+                }                
+            }.bind(this)
+          })
+        },
+
         render: function(){
           return ( 
             <div className="col-xs-10 main">
                 <div className="row">{
+
+                  //this.state.productList.map(function(){});   预留给你实现一下获取所有商品的
+
+
                   productList.map(function(item,index){
                     return (
                       <MyItems goto={item.url} product_name={item.name} product_imgurl={item.url} key={index} />
@@ -117,24 +148,28 @@
       });
 
       var MyWrap = React.createClass({
-
+        //整个网页包裹组件
         render: function(){
           return (
-              <div>
-                <MyTopNav />
-                <div className="container-fluid">
-                  <div className="row">
-                    <MyNavBar source="http://localhost:8089/api/categories" />
-                    <MyContent />
-                  </div>
-                </div>
-              </div>
+            <div>{
+            React.Children.map(this.props.children, function (child) {
+              return <div>{child}</div>
+            })
+            }</div>
           );
         }
       });
     
       ReactDOM.render(
-        <MyWrap />,
+        <MyWrap>
+          <MyTopNav />
+          <div className="container-fluid">
+            <div className="row">
+              <MyNavBar source="http://localhost:8089/api/categories" />
+              <MyContent />
+            </div>
+          </div>
+        </MyWrap>,
         document.getElementById('wrap')
       );
     </script>
