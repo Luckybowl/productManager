@@ -52,14 +52,21 @@
             })
           },
 
+          hanldClick: function(category_name){
+            console.log(category_name);
+            this.props.onItemClick(category_name)
+          },
+
           render: function () {
+              var handler =  this.hanldClick;
               return (
                   <div className="col-xs-2 sidebar">
-                    <ul className="nav nav-sidebar nav-pills nav-stacked">{                   
+                    <ul className="nav nav-sidebar nav-pills nav-stacked">{
+
                        this.state.listData.map(function(item,index){
                           return (
                           <li key={index} role="presentation" >
-                            <a key={item.categoryId} id={item.categoryId} href={`#${item.categoryName}`} aria-controls={item.categoryName} role="tab" data-toggle="tab">{item.categoryName}</a>
+                            <a key={item.categoryId} id={item.categoryId} href="javascript:void(0)" aria-controls={item.categoryName} role="tab" data-toggle="tab" onClick={handler.bind(this,item.categoryName)}>{item.categoryName}</a>
                           </li>
                           )
                        })                     
@@ -71,23 +78,26 @@
 
       var MyItems = React.createClass({
 
+        hanldClick: function(args){
+            window.location.href='detail.html?product_id='+args;
+        },
+
         render: function(){
           return (
             <div className="col-xs-3">
-              <div className="thumbnail ">
-                <a href={this.props.goto} target="_blank" className="thumbnails">
+              <div className="thumbnail" onClick={this.hanldClick.bind(this,this.props.id)}>
+                <a href="javascript:void(0);" target="_blank" className="thumbnails">
                   <img src={this.props.product_imgurl} />
                 </a>
                 <div className="caption text-center">
                   <label className="text-center">名称：</label>
                   <label className="text-center">{this.props.product_name}</label>
-          <br/>
-          <label className="text-center">价格：</label>
+                  <br/>
+                  <label className="text-center">价格：</label>
                   <label className="text-center" >{this.props.product_price}</label>
-          <br/>
-          <label className="text-center">描述：</label>
+                  <br/>
+                  <label className="text-center">描述：</label>
                   <label className="text-center">{this.props.product_desc}</label>
-
                 </div>
             </div>
           </div>
@@ -95,17 +105,18 @@
         }
       });
 
-
-      var MyContent = React.createClass({
+      var ProductArea = React.createClass({
         //商品列表组件
         getInitialState: function() {
             return {
-              productList : [],
+              productList : this.props.data || [],
             };
         },  
 
+
+
         componentDidMount: function() {
-          //在组件完成挂载的时候 发送ajax请求，获取所有商品资源
+          //在组件在第一次 挂载完成之后 发送ajax请求，获取所有商品资源
           $.ajax({
             type: "get",
             url : this.props.source,
@@ -122,31 +133,75 @@
           })
         },
 
+        componentWillReceiveProps: function(newProps){
+          //组件接受新的props参数时
+          this.setState({
+            productList: newProps.data
+          })
+        },
+
         render:function(){
-      return(
-        <div className="col-xs-10 main">
-          <div className="row">{
-            this.state.productList.map(function(item,index){
-              return(
-                <MyItems key={item.productId} id={item.productId} goto={item.productPicturePath} 
-                  product_name={item.productName} product_imgurl={item.productPicturePath} 
-                  product_price={item.productPrice} product_desc={item.productDesc}/>
-              )})
-          }</div>
-        </div>
-      )
-    }
+          return(
+            <div className="col-xs-10 main">
+              <div className="row">{
+                this.state.productList.map(function(item,index){
+                  return(
+                    <MyItems key={item.productId} id={item.productId}
+                      product_name={item.productName} product_imgurl={item.productPicturePath} 
+                      product_price={item.productPrice} product_desc={item.productDesc} />
+                  )})
+              }</div>
+            </div>
+          )
+        } 
+
+      });
+
+
+      var MyContent = React.createClass({
+       //右侧内容区
+
+        getInitialState: function () {
+            return {
+              listData: [],
+              productList: []
+            };
+        },
+
+        onCategoryChange: function(category_name){
+            $.ajax({
+              url: "http://localhost:8089/api/categories/"+category_name+"/products",
+              type: "get",
+              dataType: "json"
+            }).done(function(data){
+                this.setState({
+                  productList: data.result
+                });
+            }.bind(this))
+            
+        },
+
+        render:function(){
+          return(
+            <div className="container-fluid">
+              <div className="row">
+                <MyNavBar source="http://localhost:8089/api/categories" onItemClick={this.onCategoryChange}/>
+                <ProductArea source="http://localhost:8089/api/products" data={this.state.productList} />
+              </div>
+            </div>
+          )
+        } 
 
       });
 
       var MyWrap = React.createClass({
-        //整个网页包裹组件
+       
         render: function(){
           return (
             <div>{
-            React.Children.map(this.props.children, function (child) {
-              return child
-            })
+              React.Children.map(this.props.children, function (child) {
+                  return child
+              })
             }</div>
           );
         }
@@ -155,12 +210,7 @@
       ReactDOM.render(
         <MyWrap>
           <MyTopNav />
-          <div className="container-fluid">
-            <div className="row">
-              <MyNavBar source="http://localhost:8089/api/categories" />
-              <MyContent source="http://localhost:8089/api/products"/>
-            </div>
-          </div>
+          <MyContent />
         </MyWrap>,
         document.getElementById('wrap')
       );
