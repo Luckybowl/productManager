@@ -91,5 +91,10 @@ public interface IProduct {
 	 */
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.GET)
 	void deleteBatch();
+	
+	
+	@RequestMapping(value="/findAllCate",method=RequestMethod.GET)
+	 Iterable<Category> findAllCategory();
+	
 
 }

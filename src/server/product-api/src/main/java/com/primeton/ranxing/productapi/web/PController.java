@@ -78,4 +78,13 @@ public class PController {
 		productServer.delete(id);
 		return "";
 	}
+	
+	@RequestMapping(value="/categories",method = RequestMethod.GET)
+	String findAllCategory(){
+		JSONObject json = new JSONObject();
+		json.put("status", HttpStatus.SC_OK);
+		json.put("message", "ok");
+		json.put("result", productServer.findAllCategory());
+		return json.toJSONString();
+	}
 }
