@@ -55,6 +55,15 @@ public interface IProduct {
 	 */
 	@RequestMapping(value = "/findById", method = RequestMethod.GET)
 	Product findOne(@RequestParam("id") Long id);
+	
+	
+	/**
+	 * 分类查询
+	 * @param categoryName --类型名
+	 * @return
+	 */
+	@RequestMapping(value="/findAllByCategory",method=RequestMethod.GET)
+	List<Product> findAllByCategory(@RequestParam("categoryName") String categoryName);
 
 	/**
 	 * 按条件分页查询

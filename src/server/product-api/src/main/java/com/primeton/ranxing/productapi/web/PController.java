@@ -101,4 +101,13 @@ public class PController {
 		json.put("result", productServer.findAllCategory());
 		return json.toJSONString();
 	}
+	
+	@RequestMapping(value="/categories/{name}/products",method=RequestMethod.GET)
+	String findAllByCategory(@PathVariable("name") String category_name){
+		JSONObject json = new JSONObject();
+		json.put("status", HttpStatus.SC_OK);
+		json.put("message", "ok");
+		json.put("result", productServer.findAllByCategory(category_name));
+		return json.toJSONString();
+	}
 }
