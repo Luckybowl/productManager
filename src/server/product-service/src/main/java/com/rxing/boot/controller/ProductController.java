@@ -145,11 +145,11 @@ public class ProductController {
 	 * 删除指定商品
 	 * @param product
 	 */
-	@RequestMapping(value="/delete",method=RequestMethod.GET)
-	public void  delete(@RequestParam Long product_id){
+	@RequestMapping(value="/deleteProduct",method=RequestMethod.GET)
+	public void  deleteProduct(@RequestParam Long id){
 		ServiceInstance instance=client.getLocalServiceInstance();
 		LOGGER.info("/delete,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
-		productDao.delete(productDao.findOne(product_id));
+		productDao.delete(id);
 	}
 	
 	/**

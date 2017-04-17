@@ -90,7 +90,7 @@ public class PController {
 
 	@RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
 	String deleteProduct(@PathVariable("id") long id) {
-		productServer.delete(id);
+		productServer.deleteProduct(id);
 		return "";
 	}
 	

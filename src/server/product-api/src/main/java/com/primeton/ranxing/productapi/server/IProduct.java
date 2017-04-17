@@ -86,11 +86,10 @@ public interface IProduct {
 
 	/**
 	 * 删除指定商品
-	 * 
 	 * @param product
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	void delete(@RequestParam("product_id") Long product_id);
+	@RequestMapping(value="/deleteProduct",method=RequestMethod.GET)
+	public void  deleteProduct(@RequestParam("id") Long id);
 
 	/**
 	 * 批量删除指定商品
