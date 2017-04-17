@@ -65,7 +65,6 @@
             var category_name = e.target.dataset.name;
             for(var p in this.refs){
                 //去掉所有li中的  active 样式类
-                console.log( $(this.refs[p]));
                 $(this.refs[p]).removeClass("active");
             }
             // 给当前点击的li增加选中样式
