@@ -19,7 +19,7 @@
             <nav className="navbar navbar-default">
               <div className="container-fluid">
                 <div className="navbar-header">
-                  <a className="navbar-brand">商品</a>                
+                  <a className="navbar-brand">{this.props.brand}</a>                
                 </div>
                 <div id="navbar">			
 					<ul className="nav navbar-nav navbar-right">
@@ -63,6 +63,14 @@
 
           hanldClick: function(e){
             var category_name = e.target.dataset.name;
+            for(var p in this.refs){
+                //去掉所有li中的  active 样式类
+                console.log( $(this.refs[p]));
+                $(this.refs[p]).removeClass("active");
+            }
+            // 给当前点击的li增加选中样式
+            $(this.refs[category_name]).addClass("active");
+
             this.props.onItemClick(category_name)
           },
 
@@ -70,16 +78,20 @@
               var handler =  this.hanldClick;
               return (
                   <div className="col-xs-2 sidebar">
-                    <ul className="nav nav-sidebar nav-pills nav-stacked">{
-
+                    <ul className="nav nav-sidebar nav-pills nav-stacked">
+                      <li className="active" role="presentation" ref="all">
+                            <a id="all" href="#all" data-name="all" aria-controls="all" role="tab" data-toggle="tab" onClick={handler}>ALL</a>
+                          </li>
+                      {
                        this.state.listData.map(function(item,index){
                           return (
-                          <li key={index} role="presentation" >
-                            <a key={item.categoryId} id={item.categoryId} href="javascript:void(0)" data-name={item.categoryName} aria-controls={item.categoryName} role="tab" data-toggle="tab" onClick={handler}>{item.categoryName}</a>
+                          <li key={index+1} role="presentation" ref={item.categoryName}>
+                            <a key={item.categoryId} id={item.categoryName} href={`#${item.categoryName}`} data-name={item.categoryName} aria-controls={item.categoryName} role="tab" data-toggle="tab" onClick={handler}>{item.categoryName}</a>
                           </li>
                           )
                        })                     
-                    }</ul>
+                      }
+                    </ul>
                   </div>
               );
           }
@@ -90,15 +102,19 @@
         hanldClick: function(args){
             window.location.href='detail.html?product_id='+args;
         },
-      editClick: function(args){
+        editClick: function(args){
             window.location.href='editproduct.html?product_id='+args;
         },
-    deleteClick: function(args){
+        deleteClick: function(args){
+            var category_name = window.location.hash.substring(1)
             $.ajax({
-        type:"delete",
-        url:"http://localhost:8089/api/products/"+args,
-        success:function(){alert("你删了我！再见！")}
-      })
+              type:"delete",
+              url:"http://localhost:8089/api/products/"+args,
+              success:function(){
+                alert("你删了我！再见！");
+                this.props.deleteCallBack(category_name);
+              }.bind(this)
+            })
         },
 
         render: function(){
@@ -136,8 +152,6 @@
             };
         },  
 
-
-
         componentDidMount: function() {
           //在组件在第一次 挂载完成之后 发送ajax请求，获取所有商品资源
           $.ajax({
@@ -171,8 +185,8 @@
                   return(
                     <MyItems key={item.productId} id={item.productId}
                       product_name={item.productName} product_imgurl={item.productPicturePath} 
-                      product_price={item.productPrice} product_desc={item.productDesc} />
-                  )})
+                      product_price={item.productPrice} product_desc={item.productDesc} deleteCallBack={this.props.refreshItems}/>
+                  )}.bind(this))
               }</div>
             </div>
           )
@@ -192,8 +206,10 @@
         },
 
         onCategoryChange: function(category_name){
+          var domain = 'http://localhost:8089/api/';
+          var api_url = category_name !== "all"? domain+'categories/'+category_name+'/products': domain+'products';
             $.ajax({
-              url: "http://localhost:8089/api/categories/"+category_name+"/products",
+              url: api_url,
               type: "get",
               dataType: "json"
             }).done(function(data){
@@ -209,7 +225,7 @@
             <div className="container-fluid">
               <div className="row">
                 <MyNavBar source="http://localhost:8089/api/categories" onItemClick={this.onCategoryChange}/>
-                <ProductArea source="http://localhost:8089/api/products" data={this.state.productList} />
+                <ProductArea source="http://localhost:8089/api/products" data={this.state.productList} refreshItems={this.onCategoryChange} />
               </div>
             </div>
           )
@@ -233,7 +249,7 @@
     
       ReactDOM.render(
         <MyWrap>
-          <MyTopNav />
+          <MyTopNav brand="商品管理" />
           <MyContent />
         </MyWrap>,
         document.getElementById('wrap')
