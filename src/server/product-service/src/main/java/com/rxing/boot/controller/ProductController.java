@@ -106,6 +106,16 @@ public class ProductController {
 	}
 	
 	/**
+	 * 删除指定商品
+	 * @param product
+	 */
+	@RequestMapping(value="/deleteProduct",method=RequestMethod.GET)
+	public void  deleteProduct(@RequestParam Long id){
+		ServiceInstance instance=client.getLocalServiceInstance();
+		LOGGER.info("/delete,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
+		productDao.delete(id);
+	}
+	/**
 	 * 自定义分类查询
 	 */
 	private class MySpecCate implements Specification<Product>{
@@ -139,17 +149,6 @@ public class ProductController {
 		ServiceInstance instance=client.getLocalServiceInstance();
 		LOGGER.info("/findAllByConditonWithPage,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
 		return product;
-	}
-	
-	/**
-	 * 删除指定商品
-	 * @param product
-	 */
-	@RequestMapping(value="/deleteProduct",method=RequestMethod.GET)
-	public void  deleteProduct(@RequestParam Long id){
-		ServiceInstance instance=client.getLocalServiceInstance();
-		LOGGER.info("/delete,host:"+instance.getHost()+",service_id:"+instance.getServiceId());
-		productDao.delete(id);
 	}
 	
 	/**
