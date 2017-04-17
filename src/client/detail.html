@@ -33,12 +33,13 @@
 
     getInitialState: function() {
             return {
-              productName : "dameng",
-        productPrice: "",
+              productName : "",
+              productPrice: "",
               productDesc: "",
               productClickCounts:"",
               categoryName: "",
-              productTotal:""
+              productTotal:"",
+              productPicturePath: ""
             };
         },  
 
@@ -58,41 +59,20 @@
                     productDesc: data.result.productDesc,
                     productClickCounts: data.result.productClickCounts,
                     categoryName: data.result.categoryName,
-                    productTotal: data.result.productTotal
+                    productTotal: data.result.productTotal,
+                    productPicturePath: data.result.productPicturePath
                   })
                 }                
             }.bind(this)
           })
-        },
-
-        hanldClick: function(args){
-            $.ajax({
-              type: "post",
-              url: "http://localhost:8089/api/products/"+args,
-              dataType: "json",
-              success: function(data){
-                      if(data.status == 200){
-                        //数据请求成功
-                        this.setState({
-                          //更改status状态 重新render组件
-                          productName: data.result.productName,
-                          productPrice: data.result.productPrice,
-                          productDesc: data.result.productDesc,
-                          productClickCounts: data.result.productClickCounts,
-                          categoryName: data.result.categoryName,
-                          productTotal: data.result.productTotal
-                        })
-                      }                
-                  }.bind(this)
-            })
-        },      
+        },     
 
       render: function(){
           return (
             <div className="col-md-6">
               <div className="thumbnail" >
                 <a href="javascript:void(0);" target="_blank" className="thumbnails">
-                  <img src={this.state.productName} />
+                  <img src={this.state.productPicturePath} />
                 </a>
                 <div className="caption text-center">
                   <label className="text-center">名称：</label>
